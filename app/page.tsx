@@ -523,7 +523,7 @@ interface OnboardingQuestion {
 
 const onboardingQuestions: OnboardingQuestion[] = [
   { id: "age", question: "Qual sua faixa etaria?", options: [{ value: "16-18", label: "16-18 anos", emoji: "🎓" }, { value: "19-21", label: "19-21 anos", emoji: "🎯" }, { value: "22-24", label: "22-24 anos", emoji: "💼" }, { value: "25+", label: "25+ anos", emoji: "🚀" }] },
-  { id: "goal", question: "Qual seu maior objetivo financeiro?", options: [{ value: "poupar", label: "Comecar a poupar", emoji: "💰" }, { value: "investir", label: "Aprender a investir", emoji: "📈" }, { value: "sair_dividas", label: "Sair das dividas", emoji: "🎯" }, { value: "independencia", label: "Independencia financeira", emoji: "🏆" }] },
+  { id: "goal", question: "Por onde você quer começar sua jornada financeira?", options: [{ value: "poupar", label: "Organizar meu dinheiro", emoji: "💰" }, { value: "investir", label: "Entender como investir", emoji: "📈" }, { value: "sair_dividas", label: "Aprender a sair das dividas", emoji: "🎯" }, { value: "independencia", label: "Planejar meu futuro financeiro", emoji: "🏆" }] },
   { id: "experience", question: "Qual seu nivel de experiencia com financas?", options: [{ value: "nenhuma", label: "Sou iniciante total", emoji: "🌱" }, { value: "basica", label: "Sei o basico", emoji: "📚" }, { value: "intermediaria", label: "Tenho alguma experiencia", emoji: "⚡" }, { value: "avancada", label: "Ja mando bem", emoji: "🔥" }] },
 ]
 
@@ -559,7 +559,7 @@ function OnboardingView({ onComplete, onSubmit }: { onComplete: () => void; onSu
           <span>{Math.round(progress)}%</span>
         </div>
         <div className="h-2 overflow-hidden rounded-full bg-slate-800">
-          <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-500" style={{ width: `${progress}%` }} />
+          <div className="h-full bg-linear-to-r from-emerald-500 to-teal-500 transition-all duration-500" style={{ width: `${progress}%` }} />
         </div>
       </div>
       <div className="flex flex-1 flex-col items-center justify-center">
@@ -628,7 +628,7 @@ function BottomNav({ activeTab, onTabChange }: { activeTab: TabType; onTabChange
 function StatCard({ icon: Icon, value, label, gradient }: { icon: React.ElementType; value: string | number; label: string; gradient: string }) {
   return (
     <div className="rounded-2xl border border-slate-800 bg-slate-900 p-4 transition-all duration-200 hover:scale-105 hover:border-slate-700">
-      <div className={`mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${gradient}`}>
+      <div className={`mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br ${gradient}`}>
         <Icon className="h-5 w-5 text-white" />
       </div>
       <p className="text-xl font-bold text-white">{value}</p>
@@ -645,7 +645,7 @@ function HomeView({ data, onStartLesson, onProClick }: { data: DashboardData; on
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 text-lg font-bold text-white">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-br from-emerald-500 to-teal-500 text-lg font-bold text-white">
             {data.user.name.charAt(0).toUpperCase()}
           </div>
           <div>
@@ -673,14 +673,14 @@ function HomeView({ data, onStartLesson, onProClick }: { data: DashboardData; on
           <span className="text-sm font-bold text-emerald-400">{data.user.xp}/{data.user.xpToNextLevel} XP</span>
         </div>
         <div className="h-3 overflow-hidden rounded-full bg-slate-800">
-          <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-500" style={{ width: `${xpProgress}%` }} />
+          <div className="h-full bg-linear-to-r from-emerald-500 to-teal-500 transition-all duration-500" style={{ width: `${xpProgress}%` }} />
         </div>
       </div>
 
       {/* Streak Banner */}
       {data.user.streak >= 7 && (
-        <div className="mb-6 flex items-center gap-4 rounded-3xl border border-orange-500/30 bg-gradient-to-r from-orange-500/10 to-red-500/10 p-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 to-red-500">
+        <div className="mb-6 flex items-center gap-4 rounded-3xl border border-orange-500/30 bg-linear-to-r from-orange-500/10 to-red-500/10 p-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br from-orange-500 to-red-500">
             <Flame className="h-8 w-8 text-white" />
           </div>
           <div>
@@ -694,8 +694,8 @@ function HomeView({ data, onStartLesson, onProClick }: { data: DashboardData; on
       {data.currentLesson && (
         <div className="mb-6">
           <h2 className="mb-3 text-lg font-bold text-white">Continuar aprendendo</h2>
-          <button onClick={() => onStartLesson(data.currentLesson!)} className="flex w-full items-center gap-4 rounded-3xl border border-emerald-500/30 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 p-5 transition-all duration-200 hover:scale-[1.02]">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500">
+          <button onClick={() => onStartLesson(data.currentLesson!)} className="flex w-full items-center gap-4 rounded-3xl border border-emerald-500/30 bg-linear-to-r from-emerald-500/20 to-teal-500/20 p-5 transition-all duration-200 hover:scale-[1.02]">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-500 to-teal-500">
               <BookOpen className="h-7 w-7 text-white" />
             </div>
             <div className="flex-1 text-left">
@@ -714,13 +714,13 @@ function HomeView({ data, onStartLesson, onProClick }: { data: DashboardData; on
           {data.trails.slice(0, 3).map((trail) => (
             <div key={trail.id} className={`rounded-2xl border p-4 transition-all ${trail.isPro ? "border-amber-500/30 bg-amber-500/5" : "border-slate-800 bg-slate-900"}`}>
               <div className="flex items-center gap-4">
-                <div className={`flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${trail.color}`}>
+                <div className={`flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br ${trail.color}`}>
                   {trail.isPro ? <Crown className="h-6 w-6 text-white" /> : <Map className="h-6 w-6 text-white" />}
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <h3 className="font-semibold text-white">{trail.title}</h3>
-                    {trail.isPro && <span className="rounded-full bg-gradient-to-r from-amber-400 to-yellow-600 px-2 py-0.5 text-xs font-bold text-slate-900">PRO</span>}
+                    {trail.isPro && <span className="rounded-full bg-linear-to-r from-amber-400 to-yellow-600 px-2 py-0.5 text-xs font-bold text-slate-900">AVANÇADO</span>}
                   </div>
                   <p className="text-sm text-slate-400">{trail.completedLessons}/{trail.totalLessons} licoes</p>
                 </div>
@@ -729,7 +729,7 @@ function HomeView({ data, onStartLesson, onProClick }: { data: DashboardData; on
                 </div>
               </div>
               <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-800">
-                <div className={`h-full bg-gradient-to-r ${trail.color} transition-all`} style={{ width: `${(trail.completedLessons / trail.totalLessons) * 100}%` }} />
+                <div className={`h-full bg-linear-to-r ${trail.color} transition-all`} style={{ width: `${(trail.completedLessons / trail.totalLessons) * 100}%` }} />
               </div>
             </div>
           ))}
@@ -774,13 +774,24 @@ function TrailsView({ trails, onStartLesson, onProClick }: { trails: Trail[]; on
         </h2>
         <div className="relative">
           {/* Vertical Connection Line */}
-          <div className="absolute left-7 top-8 bottom-8 w-1 rounded-full bg-gradient-to-b from-emerald-500/50 via-emerald-500/30 to-slate-700" />
+          <div className="absolute left-7 top-8 bottom-8 w-1 rounded-full bg-linear-to-b from-emerald-500/50 via-emerald-500/30 to-slate-700" />
 
           <div className="space-y-6">
             {freeTrails.map((trail, index) => {
               const progress = (trail.completedLessons / trail.totalLessons) * 100
               const isCompleted = progress === 100
               const isStarted = progress > 0
+              
+              // Calcular tempo total estimado
+              const totalMinutes = trail.lessons.reduce((acc, l) => {
+                const min = parseInt(l.duration.replace(/\D/g, '')) || 5
+                return acc + min
+              }, 0)
+              
+              // Determinar nível da trilha
+              const trailLevel = index === 0 ? "Iniciante" : index === 1 ? "Intermediário" : "Avançado"
+              const levelColors = { "Iniciante": "text-emerald-400 bg-emerald-500/20", "Intermediário": "text-yellow-400 bg-yellow-500/20", "Avançado": "text-red-400 bg-red-500/20" }
+              const levelDots = { "Iniciante": 1, "Intermediário": 2, "Avançado": 3 }
 
               return (
                 <div key={trail.id} className="relative">
@@ -797,15 +808,29 @@ function TrailsView({ trails, onStartLesson, onProClick }: { trails: Trail[]; on
                     className="ml-12 w-[calc(100%-3rem)] overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 p-4 text-left transition-all hover:scale-[1.02] hover:border-emerald-500/50 hover:bg-slate-800"
                   >
                     <div className="flex items-center gap-4">
-                      <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${trail.color}`}>
+
+                      <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-linear-to-br ${trail.color}`}>
                         <Map className="h-6 w-6 text-white" />
                       </div>
                       <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${levelColors[trailLevel as keyof typeof levelColors]}`}>
+                            {trailLevel}
+                          </span>
+                          <div className="flex gap-0.5">
+                            {[1, 2, 3].map((d) => (
+                              <div key={d} className={`h-1.5 w-1.5 rounded-full ${d <= (levelDots[trailLevel as keyof typeof levelDots] || 1) ? 'bg-emerald-400' : 'bg-slate-700'}`} />
+                            ))}
+                          </div>
+                        </div>
                         <h3 className="truncate font-bold text-white">{trail.title}</h3>
                         <p className="truncate text-sm text-slate-400">{trail.description}</p>
                         <div className="mt-2 flex items-center gap-3">
-                          <span className="text-xs text-slate-500">{trail.totalLessons} licoes</span>
-                          <span className="text-xs font-medium text-emerald-400">{trail.completedLessons}/{trail.totalLessons}</span>
+                          <span className="text-xs text-slate-500">{trail.totalLessons} lições</span>
+                          <span className="text-xs text-slate-500">•</span>
+                          <span className="text-xs text-slate-500">{totalMinutes} min</span>
+                          <span className="text-xs font-medium text-emerald-400 ml-auto">{trail.completedLessons}/{trail.totalLessons}</span>
+
                         </div>
                       </div>
                       <div className="flex shrink-0 flex-col items-center">
@@ -826,6 +851,13 @@ function TrailsView({ trails, onStartLesson, onProClick }: { trails: Trail[]; on
                         </div>
                       </div>
                     </div>
+                    {/* CTA Button */}
+                    <div className="mt-3 flex items-center justify-end">
+                      <span className="text-xs font-bold text-emerald-400 flex items-center gap-1">
+                        {isCompleted ? "Revisar" : isStarted ? "Continuar" : "Iniciar"}
+                        <ChevronRight className="h-3 w-3" />
+                      </span>
+                    </div>
                   </button>
                 </div>
               )
@@ -842,7 +874,7 @@ function TrailsView({ trails, onStartLesson, onProClick }: { trails: Trail[]; on
         </h2>
         <div className="relative">
           {/* Vertical Connection Line */}
-          <div className="absolute left-7 top-8 bottom-8 w-1 rounded-full bg-gradient-to-b from-amber-500/50 via-amber-500/30 to-slate-700" />
+          <div className="absolute left-7 top-8 bottom-8 w-1 rounded-full bg-linear-to-b from-amber-500/50 via-amber-500/30 to-slate-700" />
 
           <div className="space-y-6">
             {proTrails.map((trail) => (
@@ -854,15 +886,15 @@ function TrailsView({ trails, onStartLesson, onProClick }: { trails: Trail[]; on
 
                 <button
                   onClick={onProClick}
-                  className="ml-12 w-[calc(100%-3rem)] overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-500/5 to-yellow-500/5 p-4 text-left transition-all hover:scale-[1.02] hover:border-amber-500/50"
+                  className="ml-12 w-[calc(100%-3rem)] overflow-hidden rounded-2xl border border-amber-500/30 bg-linear-to-r from-amber-500/5 to-yellow-500/5 p-4 text-left transition-all hover:scale-[1.02] hover:border-amber-500/50"
                 >
                   {/* Pro Badge */}
-                  <div className="absolute right-4 top-4 rounded-full bg-gradient-to-r from-amber-400 to-yellow-600 px-2 py-0.5 text-xs font-bold text-slate-900">
+                  <div className="absolute right-4 top-4 rounded-full bg-linear-to-r from-amber-400 to-yellow-600 px-2 py-0.5 text-xs font-bold text-slate-900">
                     PRO
                   </div>
 
                   <div className="flex items-center gap-4">
-                    <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${trail.color}`}>
+                    <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-linear-to-br ${trail.color}`}>
                       <Crown className="h-6 w-6 text-white" />
                     </div>
                     <div className="min-w-0 flex-1">
@@ -926,13 +958,17 @@ function TrailDetailView({ trail, onBack, onStartLesson, onProClick }: { trail: 
         {/* Start Learning Call-to-Action Card */}
         {activeLesson && (
           <div className="relative mb-16 group">
-            <div className={`absolute -inset-1 bg-gradient-to-r ${trail.color} rounded-[2rem] blur opacity-25 group-hover:opacity-40 transition duration-700`}></div>
+
+            <div className={`absolute -inset-1 bg-linear-to-r ${trail.color} rounded-[2rem] blur opacity-25 group-hover:opacity-40 transition duration-700`}></div>
+
             <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/40 backdrop-blur-2xl p-6">
               <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
                 <BookOpen className="h-24 w-24 text-white -mr-8 -mt-8 rotate-12" />
               </div>
               <div className="flex items-center gap-5 relative z-10">
-                <div className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-3xl bg-gradient-to-br ${trail.color} shadow-2xl`}>
+
+                <div className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-3xl bg-linear-to-br ${trail.color} shadow-2xl`}>
+
                   <BookOpen className="h-8 w-8 text-white" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -940,7 +976,9 @@ function TrailDetailView({ trail, onBack, onStartLesson, onProClick }: { trail: 
                   <h3 className="text-xl font-black text-white truncate mb-4">{activeLesson.title}</h3>
                   <Button
                     onClick={() => onStartLesson(activeLesson)}
-                    className="w-full h-12 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-sm font-black text-white shadow-lg shadow-emerald-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+
+                    className="w-full h-12 rounded-2xl bg-linear-to-r from-emerald-500 to-teal-500 text-sm font-black text-white shadow-lg shadow-emerald-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+
                   >
                     COMEÇAR AGORA
                   </Button>
@@ -955,7 +993,9 @@ function TrailDetailView({ trail, onBack, onStartLesson, onProClick }: { trail: 
       <div className="relative max-w-md mx-auto px-12 pb-20">
         {/* Animated Connector Line */}
         <div className="absolute left-1/2 top-0 bottom-0 w-2.5 -translate-x-1/2 overflow-hidden opacity-5 z-0 pointer-events-none rounded-full">
-          <div className={`h-full w-full bg-gradient-to-b from-emerald-500 via-teal-500 to-transparent`} />
+
+          <div className={`h-full w-full bg-linear-to-b from-emerald-500 via-teal-500 to-transparent`} />
+
         </div>
 
         <div className="relative space-y-24 py-10 flex flex-col items-center">
@@ -1064,15 +1104,27 @@ function ToolsView({ onProClick }: { onProClick: () => void }) {
   const [activeTool, setActiveTool] = useState<string | null>(null)
   const { user, expenses, monthlyIncome, emergencyFundGoal, emergencyFundCurrent, investments, completedLessons, updateUserXp } = useAppStore()
 
+
+  // Níveis das ferramentas:
+  // Nível 1 — Iniciante: Controle de Gastos, Reserva de Emergência, Juros Compostos
+  // Nível 2 — Intermediário: Simulador Tesouro, Aposentadoria (educacional)
+  // Nível 3 — Avançado: Projeção de Ações, Simulador Cripto
   const tools = [
-    { id: "budget", title: "Controle de Gastos", description: "Organize suas despesas mensais", icon: Wallet, color: "from-emerald-500 to-teal-500", isPro: false, progress: expenses.length > 0 ? 100 : 0, xp: 50 },
-    { id: "tesouro", title: "Simulador Tesouro", description: "Calcule seus rendimentos", icon: Building2, color: "from-blue-500 to-cyan-500", isPro: false, progress: 0, xp: 30 },
-    { id: "stocks", title: "Projecao de Acoes", description: "Simule investimentos", icon: TrendingUp, color: "from-purple-500 to-indigo-500", isPro: false, progress: investments.length > 0 ? 100 : 0, xp: 40 },
-    { id: "compound", title: "Juros Compostos", description: "Poder do tempo", icon: Percent, color: "from-amber-500 to-orange-500", isPro: false, progress: 0, xp: 25 },
-    { id: "emergency", title: "Reserva de Emergencia", description: "Calcule sua reserva", icon: PiggyBank, color: "from-pink-500 to-rose-500", isPro: false, progress: emergencyFundGoal > 0 ? (emergencyFundCurrent / emergencyFundGoal) * 100 : 0, xp: 60 },
-    { id: "crypto", title: "Simulador Cripto", description: "Projete criptos", icon: Coins, color: "from-orange-500 to-red-500", isPro: true, progress: 0, xp: 100 },
-    { id: "retirement", title: "Aposentadoria", description: "Planeje seu futuro", icon: Target, color: "from-indigo-500 to-purple-500", isPro: true, progress: 0, xp: 120 },
+    { id: "budget", title: "Controle de Gastos", description: "Organize suas despesas mensais", icon: Wallet, color: "from-emerald-500 to-teal-500", isPro: false, progress: expenses.length > 0 ? 100 : 0, xp: 50, level: 1 },
+    { id: "tesouro", title: "Simulador Tesouro", description: "Calcule seus rendimentos", icon: Building2, color: "from-blue-500 to-cyan-500", isPro: false, progress: 0, xp: 30, level: 2 },
+    { id: "stocks", title: "Simulacao de Ativos", description: "Simule comportamento de acoes", icon: TrendingUp, color: "from-purple-500 to-indigo-500", isPro: false, progress: investments.length > 0 ? 100 : 0, xp: 40, level: 3 },
+    { id: "compound", title: "Juros Compostos", description: "Poder do tempo", icon: Percent, color: "from-amber-500 to-orange-500", isPro: false, progress: 0, xp: 25, level: 1 },
+    { id: "emergency", title: "Reserva de Emergencia", description: "Calcule sua reserva", icon: PiggyBank, color: "from-pink-500 to-rose-500", isPro: false, progress: emergencyFundGoal > 0 ? (emergencyFundCurrent / emergencyFundGoal) * 100 : 0, xp: 60, level: 1 },
+    { id: "crypto", title: "Simulador de Volatilidade", description: "Simule volatilidade (cripto)", icon: Coins, color: "from-orange-500 to-red-500", isPro: false, progress: 0, xp: 100, level: 3 },
+    { id: "retirement", title: "Aposentadoria", description: "Planeje seu futuro", icon: Target, color: "from-indigo-500 to-purple-500", isPro: false, progress: 0, xp: 120, level: 2 },
   ]
+
+  // Obter nível atual do usuário (padrão 1 se não definido)
+  const userLevel = user?.level || 1
+
+  // Verificar se ferramenta está desbloqueada para o nível do usuário
+  const isToolUnlocked = (toolLevel: number) => userLevel >= toolLevel
+
 
   // Calculate Health Score (Gamified Metric)
   const calculateHealthScore = () => {
@@ -1104,7 +1156,9 @@ function ToolsView({ onProClick }: { onProClick: () => void }) {
 
   const missions = [
     { id: 1, title: "Definir Renda Mensal", icon: Wallet, xp: 20, done: monthlyIncome > 0 },
-    { id: 2, title: "Usar Simulador de Investimento", icon: TrendingUp, xp: 40, done: investments.length > 0 },
+
+    { id: 2, title: "Usar Simulador Educacional", icon: TrendingUp, xp: 40, done: investments.length > 0 },
+
     { id: 3, title: "Concluir uma Lição", icon: BookOpen, xp: 50, done: ((completedLessons as any)?.size || (completedLessons as any)?.length || 0) > 0 },
   ]
 
@@ -1123,6 +1177,33 @@ function ToolsView({ onProClick }: { onProClick: () => void }) {
 
   return (
     <div className="min-h-screen bg-slate-950 px-4 py-6 pb-28">
+
+      {/* Banner de Nível do Usuário */}
+      <div className="mb-6 flex items-center justify-between rounded-2xl border border-amber-500/20 bg-amber-500/5 px-4 py-3">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-yellow-600">
+            <Crown className="h-5 w-5 text-slate-900" />
+          </div>
+          <div>
+            <p className="text-xs font-bold text-white">Nível {userLevel}</p>
+            <p className="text-[10px] text-slate-400">Ferramentas desbloqueadas</p>
+          </div>
+        </div>
+        <div className="flex gap-1">
+          {[1, 2, 3].map((lvl) => (
+            <div
+              key={lvl}
+              className={`h-2 w-6 rounded-full transition-all ${
+                userLevel >= lvl
+                  ? lvl === 1 ? "bg-emerald-500" : lvl === 2 ? "bg-yellow-500" : "bg-red-500"
+                  : "bg-slate-800"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+
+
       {/* 1. Health Score Card (Gamified) */}
       <div className="mb-8 relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-slate-900/40 p-6 backdrop-blur-2xl">
         <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
@@ -1200,18 +1281,36 @@ function ToolsView({ onProClick }: { onProClick: () => void }) {
           const Icon = tool.icon
           const isComplete = tool.progress === 100
 
+          const isUnlocked = isToolUnlocked(tool.level)
+          const levelColors = { 1: "bg-emerald-500", 2: "bg-yellow-500", 3: "bg-red-500" }
+          const levelLabels = { 1: "INICIANTE", 2: "INTERMEDIÁRIO", 3: "AVANÇADO" }
+
+
           return (
             <button
               key={tool.id}
-              onClick={() => tool.isPro ? onProClick() : setActiveTool(tool.id)}
-              className={`group relative overflow-hidden rounded-[2rem] border p-5 text-left transition-all hover:scale-[1.02] active:scale-[0.98] ${tool.isPro
-                ? "border-amber-500/20 bg-amber-500/5"
-                : isComplete
-                  ? "border-emerald-500/30 bg-emerald-500/5 shadow-lg shadow-emerald-500/10"
-                  : "border-slate-800 bg-slate-900/60 shadow-xl shadow-black/20"
+
+              onClick={() => {
+                if (!isUnlocked) {
+                  // Mostrar mensagem de nível necessário
+                  alert(`Você precisa estar no nível ${tool.level} para desbloquear esta ferramenta. Complete mais lições para subir de nível!`)
+                } else if (tool.isPro) {
+                  onProClick()
+                } else {
+                  setActiveTool(tool.id)
+                }
+              }}
+              className={`group relative overflow-hidden rounded-[2rem] border p-5 text-left transition-all hover:scale-[1.02] active:scale-[0.98] ${!isUnlocked
+                ? "border-slate-800/50 bg-slate-900/30 opacity-60"
+                : tool.isPro
+                  ? "border-amber-500/20 bg-amber-500/5"
+                  : isComplete
+                    ? "border-emerald-500/30 bg-emerald-500/5 shadow-lg shadow-emerald-500/10"
+                    : "border-slate-800 bg-slate-900/60 shadow-xl shadow-black/20"
                 }`}
             >
-              <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${tool.color} shadow-lg transition-transform group-hover:scale-110 group-hover:-rotate-6`}>
+              <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-linear-to-br ${tool.color} shadow-lg transition-transform group-hover:scale-110 group-hover:-rotate-6`}>
+
                 <Icon className="h-6 w-6 text-white" />
               </div>
 
@@ -1226,15 +1325,31 @@ function ToolsView({ onProClick }: { onProClick: () => void }) {
                   <Zap className="h-3 w-3 text-amber-500" />
                   <span className="text-[10px] font-black text-amber-500">+{tool.xp} XP</span>
                 </div>
-                {tool.isPro ? (
-                  <div className="flex h-6 w-10 items-center justify-center rounded-full bg-gradient-to-r from-amber-400 to-yellow-600 text-[9px] font-black text-slate-900">PRO</div>
+
+                {!isUnlocked ? (
+                  <div className="flex h-6 w-10 items-center justify-center rounded-full bg-slate-800 text-[9px] font-black text-slate-500">NÍVEL {tool.level}</div>
+                ) : tool.isPro ? (
+                  <div className="flex h-6 w-10 items-center justify-center rounded-full bg-linear-to-r from-amber-400 to-yellow-600 text-[9px] font-black text-slate-900">AVANÇADO</div>
+
                 ) : (
                   <div className="text-[9px] font-black text-slate-600 uppercase tracking-widest">{isComplete ? "OK" : `${Math.round(tool.progress)}%`}</div>
                 )}
               </div>
 
+
+              {/* Level Lock Overlay */}
+              {!isUnlocked && (
+                <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[1px] flex items-center justify-center opacity-100 transition-opacity">
+                  <div className="flex flex-col items-center gap-1">
+                    <Lock className="h-5 w-5 text-slate-500" />
+                    <span className="text-[9px] font-black text-slate-500 uppercase">Nível {tool.level}</span>
+                  </div>
+                </div>
+              )}
+
               {/* Pro Overlay */}
-              {tool.isPro && (
+              {tool.isPro && isUnlocked && (
+
                 <div className="absolute inset-0 bg-slate-950/20 backdrop-blur-[1px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                   <Lock className="h-6 w-6 text-amber-400" />
                 </div>
@@ -1281,11 +1396,13 @@ function ToolDetailView({ toolId, toolTitle, onBack }: { toolId: string; toolTit
     },
     tesouro: {
       what: "O Simulador de Tesouro Direto projeta o rendimento de titulos publicos baseados em aportes mensais e tempo.",
-      why: "O Tesouro e o investimento mais seguro do pais. Entender seu crescimento ajuda a planejar metas de médio e longo prazo com seguranca."
+
+      why: "O Tesouro e o investimento mais seguro do pais. Entender seu crescimento ajuda a planejar metas de médio e longo prazo com seguranca. Aprenda como funcionam os titulos publicos."
     },
     stocks: {
-      what: "Esta ferramenta simula o crescimento de um capital investido em acoes considerando dividendos e valorizacao media.",
-      why: "Acoes permitem que voce seja socio das maiores empresas do mundo. Simular ajuda a visualizar o poder da renda variavel no longo prazo."
+      what: "Esta ferramenta simula o comportamento de ativos de renda variavel no longo prazo.",
+      why: "Entenda como funciona a renda variavel e os riscos envolvidos. Aprenda a analisar o mercado sem recommendation de compra."
+
     },
     compound: {
       what: "Os Juros Compostos sao calculados sobre o montante acumulado, gerando um efeito de bola de neve no seu patrimonio.",
@@ -1531,14 +1648,18 @@ function ToolDetailView({ toolId, toolTitle, onBack }: { toolId: string; toolTit
       </div>
 
       {/* Calculate Button */}
-      <Button onClick={handleCalculate} className="mt-6 h-14 w-full rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-lg font-bold text-white transition-all hover:scale-[1.02]">
+
+      <Button onClick={handleCalculate} className="mt-6 h-14 w-full rounded-2xl bg-linear-to-r from-emerald-500 to-teal-500 text-lg font-bold text-white transition-all hover:scale-[1.02]">
+
         <Calculator className="mr-2 h-5 w-5" />
         Calcular
       </Button>
 
       {/* Result */}
       {result && (
-        <div className="mt-8 overflow-hidden rounded-[2.5rem] border border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 p-8 shadow-2xl shadow-emerald-500/10 animate-in zoom-in-95 duration-500">
+
+        <div className="mt-8 overflow-hidden rounded-[2.5rem] border border-emerald-500/30 bg-linear-to-br from-emerald-500/10 to-teal-500/10 p-8 shadow-2xl shadow-emerald-500/10 animate-in zoom-in-95 duration-500">
+
           <div className="flex items-center justify-between mb-6">
             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400">Resultado da Simulação</p>
             <div className="flex items-center gap-2 rounded-full bg-emerald-500/20 px-3 py-1">
@@ -1578,9 +1699,11 @@ function LessonExplanationView({ lesson, onStartPractice, onBack }: { lesson: Le
     <div className="flex min-h-screen flex-col bg-slate-950">
       {/* Header */}
       <div className="relative h-64 w-full overflow-hidden shrink-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 to-teal-500/20" />
+
+        <div className="absolute inset-0 bg-linear-to-br from-emerald-500/20 to-teal-500/20" />
         <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-          <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-xl shadow-emerald-500/20">
+          <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-linear-to-br from-emerald-500 to-teal-500 shadow-xl shadow-emerald-500/20">
+
             <BookOpen className="h-10 w-10 text-white" />
           </div>
           <h1 className="text-2xl font-black text-white">{lesson.title}</h1>
@@ -1660,7 +1783,9 @@ function LessonExplanationView({ lesson, onStartPractice, onBack }: { lesson: Le
 
             <Button
               onClick={onStartPractice}
-              className="h-16 w-full rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-lg font-black text-white shadow-lg shadow-emerald-500/20 transition-all hover:translate-y-[-2px] active:translate-y-[1px]"
+
+              className="h-16 w-full rounded-2xl bg-linear-to-r from-emerald-500 to-teal-500 text-lg font-black text-white shadow-lg shadow-emerald-500/20 transition-all hover:translate-y-[-2px] active:translate-y-[1px]"
+
             >
               IR PARA PRÁTICA
             </Button>
@@ -1713,7 +1838,9 @@ function QuizView({ lesson, onComplete, onBack }: { lesson: Lesson; onComplete: 
           <div className="w-10" />
         </div>
         <div className="h-2.5 overflow-hidden rounded-full bg-slate-900 border border-slate-800">
-          <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]" style={{ width: `${progress}%` }} />
+
+          <div className="h-full bg-linear-to-r from-emerald-500 to-teal-500 transition-all duration-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]" style={{ width: `${progress}%` }} />
+
         </div>
       </div>
 
@@ -1793,7 +1920,9 @@ function QuizView({ lesson, onComplete, onBack }: { lesson: Lesson; onComplete: 
                 </p>
               </div>
             </div>
-            <Button onClick={handleNext} className="h-16 w-full rounded-[1.5rem] bg-gradient-to-r from-emerald-500 to-teal-500 text-lg font-black text-white shadow-xl shadow-emerald-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
+
+            <Button onClick={handleNext} className="h-16 w-full rounded-[1.5rem] bg-linear-to-r from-emerald-500 to-teal-500 text-lg font-black text-white shadow-xl shadow-emerald-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
+
               {isLastQuestion ? "CONCLUIR JORNADA" : "PRÓXIMO DESAFIO"}
               <ChevronRight className="ml-2 h-6 w-6" />
             </Button>
@@ -1820,7 +1949,9 @@ function ProModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void })
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="border-amber-500/30 bg-slate-900 sm:max-w-md">
         <DialogHeader>
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 to-yellow-600">
+
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-amber-400 to-yellow-600">
+
             <Crown className="h-8 w-8 text-white" />
           </div>
           <DialogTitle className="text-center text-2xl text-white">Destravar PRO</DialogTitle>
@@ -1828,7 +1959,9 @@ function ProModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void })
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="space-y-3">
-            {["Acesso a todas as aulas avancadas", "Simuladores de investimento", "Suporte prioritario", "Certificados de conclusao"].map((feature, index) => (
+
+            {["Acesso a todas as aulas avançadas", "Simuladores educacionais", "Suporte prioritário", "Certificados de conclusão"].map((feature, index) => (
+
               <div key={index} className="flex items-center gap-3">
                 <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500/20">
                   <CheckCircle2 className="h-4 w-4 text-emerald-400" />
@@ -1841,7 +1974,9 @@ function ProModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void })
             <p className="text-sm text-amber-400">Por apenas</p>
             <p className="text-3xl font-bold text-white">R$ 19,90<span className="text-lg font-normal text-slate-400">/mes</span></p>
           </div>
-          <Button className="h-14 w-full rounded-2xl bg-gradient-to-r from-amber-400 to-yellow-600 text-lg font-bold text-slate-900 transition-all hover:scale-[1.02]">
+
+          <Button className="h-14 w-full rounded-2xl bg-linear-to-r from-amber-400 to-yellow-600 text-lg font-bold text-slate-900 transition-all hover:scale-[1.02]">
+
             <Sparkles className="mr-2 h-5 w-5" />
             Quero ser PRO
           </Button>
@@ -1852,23 +1987,60 @@ function ProModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void })
 }
 
 function CompletionModal({ isOpen, onClose, xpEarned }: { isOpen: boolean; onClose: () => void; xpEarned: number }) {
+
+  const [showXpAnimation, setShowXpAnimation] = useState(false)
+  const [xpCount, setXpCount] = useState(0)
+
+  useEffect(() => {
+    if (isOpen) {
+      setXpCount(0)
+      setShowXpAnimation(false)
+      // Animação de contagem progressiva
+      const timer = setTimeout(() => setShowXpAnimation(true), 100)
+      const interval = setInterval(() => {
+        setXpCount(prev => {
+          if (prev < xpEarned) return prev + 10
+          clearInterval(interval)
+          return xpEarned
+        })
+      }, 50)
+      return () => { clearTimeout(timer); clearInterval(interval) }
+    }
+  }, [isOpen, xpEarned])
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="border-emerald-500/30 bg-slate-900 sm:max-w-md">
+      <DialogContent className="border-emerald-500/30 bg-slate-900 sm:max-w-md overflow-hidden">
         <DialogHeader>
-          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-emerald-500 to-teal-500">
-            <Trophy className="h-10 w-10 text-white" />
+          {/* Animated Trophy with Glow */}
+          <div className="mx-auto mb-4 relative">
+            <div className={`absolute inset-0 rounded-3xl bg-emerald-500 blur-xl transition-all duration-700 ${showXpAnimation ? 'opacity-60 scale-100' : 'opacity-0 scale-50'}`} />
+            <div className={`relative flex h-20 w-20 items-center justify-center rounded-3xl bg-linear-to-br from-emerald-500 to-teal-500 transition-all duration-500 ${showXpAnimation ? 'scale-100' : 'scale-50'}`}>
+              <Trophy className="h-10 w-10 text-white" />
+            </div>
           </div>
-          <DialogTitle className="text-center text-2xl text-white">Parabens!</DialogTitle>
-          <DialogDescription className="text-center text-slate-400">Voce completou a licao com sucesso!</DialogDescription>
+          <DialogTitle className="text-center text-2xl text-white">Parabéns!</DialogTitle>
+          <DialogDescription className="text-center text-slate-400">Você completou a lição com sucesso!</DialogDescription>
         </DialogHeader>
         <div className="py-4 text-center">
-          <div className="inline-flex items-center gap-2 rounded-2xl bg-emerald-500/20 px-6 py-3">
-            <Zap className="h-6 w-6 text-emerald-400" />
-            <span className="text-2xl font-bold text-emerald-400">+{xpEarned} XP</span>
+          {/* Animated XP Counter */}
+          <div className={`inline-flex items-center gap-2 rounded-2xl bg-emerald-500/20 px-6 py-3 transition-all duration-300 ${showXpAnimation ? 'scale-100' : 'scale-90'}`}>
+            <Zap className={`h-6 w-6 text-emerald-400 transition-all duration-300 ${showXpAnimation ? 'animate-bounce' : ''}`} />
+            <span className="text-3xl font-black text-emerald-400 tabular-nums">
+              +{xpCount}
+            </span>
+            <span className="text-sm font-bold text-emerald-400">XP</span>
+          </div>
+          
+          {/* Progress Message */}
+          <div className="mt-4 text-sm text-slate-400">
+            <p>Próxima lição desbloqueada! 🚀</p>
           </div>
         </div>
-        <Button onClick={onClose} className="h-14 w-full rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 text-lg font-bold text-white transition-all hover:scale-[1.02]">Continuar</Button>
+        <Button onClick={onClose} className="h-14 w-full rounded-2xl bg-linear-to-r from-emerald-500 to-teal-500 text-lg font-bold text-white transition-all hover:scale-[1.02]">
+          Continuar
+        </Button>
+
       </DialogContent>
     </Dialog>
   )
@@ -1934,7 +2106,9 @@ function LoginView({ onSuccess }: { onSuccess: () => void }) {
   return (
     <div className="flex min-h-screen bg-slate-950 overflow-hidden">
       {/* Desktop Side Panel */}
-      <div className="hidden lg:flex w-1/2 relative flex-col justify-between p-12 bg-gradient-to-br from-emerald-600 to-teal-900 overflow-hidden">
+
+      <div className="hidden lg:flex w-1/2 relative flex-col justify-between p-12 bg-linear-to-br from-emerald-600 to-teal-900 overflow-hidden">
+
         {/* Animated Background Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
           <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-emerald-400 blur-[120px] animate-pulse" />
@@ -2139,11 +2313,13 @@ function ProfileView({ onLogout, onProClick }: { onLogout: () => void; onProClic
       {/* Profile Header */}
       <div className="mb-6 flex flex-col items-center">
         <div className="relative mb-4">
-          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 text-3xl font-bold text-white ring-4 ring-emerald-500/20">
+
+          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-linear-to-br from-emerald-500 to-teal-500 text-3xl font-bold text-white ring-4 ring-emerald-500/20">
             {user.name.charAt(0).toUpperCase()}
           </div>
           {user.isPro && (
-            <div className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-amber-400 to-yellow-600 ring-2 ring-slate-950">
+            <div className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-br from-amber-400 to-yellow-600 ring-2 ring-slate-950">
+
               <Crown className="h-4 w-4 text-white" />
             </div>
           )}
@@ -2155,7 +2331,9 @@ function ProfileView({ onLogout, onProClick }: { onLogout: () => void; onProClic
             Nivel {user.level}
           </span>
           {user.isPro && (
-            <span className="rounded-full bg-gradient-to-r from-amber-400 to-yellow-600 px-3 py-1 text-sm font-bold text-slate-900">
+
+            <span className="rounded-full bg-linear-to-r from-amber-400 to-yellow-600 px-3 py-1 text-sm font-bold text-slate-900">
+
               PRO
             </span>
           )}
@@ -2168,7 +2346,9 @@ function ProfileView({ onLogout, onProClick }: { onLogout: () => void; onProClic
           const Icon = stat.icon
           return (
             <div key={stat.label} className="rounded-2xl border border-slate-800 bg-slate-900 p-3 text-center">
-              <div className={`mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${stat.color}`}>
+
+              <div className={`mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br ${stat.color}`}>
+
                 <Icon className="h-5 w-5 text-white" />
               </div>
               <p className="text-lg font-bold text-white">{stat.value}</p>
@@ -2186,7 +2366,9 @@ function ProfileView({ onLogout, onProClick }: { onLogout: () => void; onProClic
         </div>
         <div className="h-3 overflow-hidden rounded-full bg-slate-800">
           <div
-            className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all"
+
+            className="h-full bg-linear-to-r from-emerald-500 to-teal-500 transition-all"
+
             style={{ width: `${(user.xp / user.xpToNextLevel) * 100}%` }}
           />
         </div>
@@ -2233,10 +2415,12 @@ function ProfileView({ onLogout, onProClick }: { onLogout: () => void; onProClic
         {!user.isPro && (
           <button
             onClick={onProClick}
-            className="flex w-full items-center justify-between rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 to-yellow-500/10 p-4 transition-all hover:scale-[1.02]"
+
+            className="flex w-full items-center justify-between rounded-2xl border border-amber-500/30 bg-linear-to-r from-amber-500/10 to-yellow-500/10 p-4 transition-all hover:scale-[1.02]"
           >
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-yellow-600">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-amber-400 to-yellow-600">
+
                 <Crown className="h-5 w-5 text-white" />
               </div>
               <div className="text-left">
@@ -2278,6 +2462,9 @@ function FinanceApp() {
   const [showProModal, setShowProModal] = useState(false)
   const [showCompletionModal, setShowCompletionModal] = useState(false)
   const [isHydrated, setIsHydrated] = useState(false)
+
+  const [disclaimerDismissed, setDisclaimerDismissed] = useState(false)
+
 
   // Zustand store
   const {
@@ -2395,6 +2582,32 @@ function FinanceApp() {
 
   return (
     <>
+
+      {/* Educational Disclaimer Banner */}
+      {!disclaimerDismissed && (
+        <div className="fixed bottom-20 left-4 right-4 z-50 md:left-auto md:right-4 md:w-96">
+          <div className="bg-slate-900/95 backdrop-blur-sm border border-amber-500/30 rounded-2xl p-4 shadow-xl">
+            <div className="flex items-start gap-3">
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center">
+                <span className="text-amber-400 text-sm">⚠️</span>
+              </div>
+              <div className="flex-1">
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  O Kapitalia é uma plataforma educacional. As simulações não constituem recomendação de investimento.
+                </p>
+              </div>
+              <button 
+                onClick={() => setDisclaimerDismissed(true)}
+                className="text-slate-500 hover:text-slate-300 transition-colors"
+              >
+                <span className="text-lg">×</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
       {activeTab === "home" && <HomeView data={mergedData} onStartLesson={handleStartLesson} onProClick={() => setShowProModal(true)} />}
       {activeTab === "trails" && <TrailsView trails={mergedData.trails} onStartLesson={handleStartLesson} onProClick={() => setShowProModal(true)} />}
       {activeTab === "tools" && <ToolsView onProClick={() => setShowProModal(true)} />}
