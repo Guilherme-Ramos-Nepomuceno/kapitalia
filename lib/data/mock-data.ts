@@ -144,7 +144,7 @@ export const mockTrails: Trail[] = [
       {
         id: "lesson-2",
         title: "Orçamento Pessoal",
-        description: "Aprenda a criar e manter um orçamento eficiente",
+        description: "Entenda como criar e manter um orçamento eficiente",
         duration: "12 min",
         xpReward: 150,
         isCompleted: true,
@@ -194,7 +194,7 @@ export const mockTrails: Trail[] = [
   {
     id: "trail-2",
     title: "Investimentos 101",
-    description: "Inicie sua jornada no mundo dos investimentos",
+    description: "Explore o mundo dos investimentos",
     icon: "TrendingUp",
     color: "#4ECDC4",
     isPro: false,

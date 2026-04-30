@@ -16,7 +16,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'Kapitalia - Domine suas Financas',
+  title: 'Kapitalia - Explore suas Financas',
   description: 'Aprenda financas de forma inteligente. Plataforma EdTech/FinTech para a Geracao Z.',
   generator: 'v0.app',
   icons: {
