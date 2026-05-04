@@ -1,9 +1,11 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { QueryClient, QueryClientProvider, useQuery, useMutation } from "@tanstack/react-query"
+import { toast } from "sonner"
+import { QueryClient, QueryClientProvider, useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { z } from "zod"
 import { useAppStore } from "@/lib/store"
+import { api } from "@/lib/api"
 import {
   Flame,
   Trophy,
@@ -53,6 +55,10 @@ import {
   HeartPulse,
   Check,
 } from "lucide-react"
+import { lessonsApi } from "@/lib/api/lessons"
+import { authApi } from "@/lib/api/auth"
+import { dashboardApi } from "@/lib/api/dashboard"
+import { financialApi } from "@/lib/api/financial"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -83,7 +89,7 @@ const UserSchema = z.object({
 const OnboardingSchema = z.object({
   age: z.enum(["16-18", "19-21", "22-24", "25+"]),
   goal: z.enum(["poupar", "investir", "sair_dividas", "independencia"]),
-  experience: z.enum(["nenhuma", "basica", "intermediaria", "avancada"]),
+  experience: z.enum(["none", "beginner", "intermediate", "advanced"]),
 })
 
 const LessonSchema = z.object({
@@ -434,28 +440,21 @@ const mockQuizQuestions: QuizQuestion[] = [
   },
 ]
 
-const fetchDashboardData = (): Promise<DashboardData> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        user: { id: "user-1", name: "Joao", level: 1, xp: 0, xpToNextLevel: 100, streak: 0, isPro: false, totalCoins: 0 },
-        lessons: mockTrails[0].lessons,
-        currentLesson: mockTrails[0].lessons[0],
-        weeklyProgress: 0,
-        trails: mockTrails,
-      })
-    }, 800)
-  })
+const fetchDashboardData = async (): Promise<DashboardData> => {
+  const [dashboardResp, trailsResp] = await Promise.all([
+    api.get("/dashboard"),
+    api.get("/trails")
+  ])
+  
+  return {
+    ...dashboardResp,
+    trails: trailsResp || []
+  } as DashboardData
 }
 
-const submitOnboarding = (data: OnboardingData): Promise<{ success: boolean }> => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const result = OnboardingSchema.safeParse(data)
-      if (result.success) resolve({ success: true })
-      else reject(new Error("Dados invalidos"))
-    }, 800)
-  })
+const submitOnboarding = async (data: OnboardingData): Promise<{ success: boolean }> => {
+  const response = await api.post("/user/onboarding", data)
+  return response as { success: boolean }
 }
 
 // ============================================
@@ -524,7 +523,7 @@ interface OnboardingQuestion {
 const onboardingQuestions: OnboardingQuestion[] = [
   { id: "age", question: "Qual sua faixa etaria?", options: [{ value: "16-18", label: "16-18 anos", emoji: "🎓" }, { value: "19-21", label: "19-21 anos", emoji: "🎯" }, { value: "22-24", label: "22-24 anos", emoji: "💼" }, { value: "25+", label: "25+ anos", emoji: "🚀" }] },
   { id: "goal", question: "Por onde você quer começar sua jornada financeira?", options: [{ value: "poupar", label: "Organizar meu dinheiro", emoji: "💰" }, { value: "investir", label: "Entender como investir", emoji: "📈" }, { value: "sair_dividas", label: "Aprender a sair das dividas", emoji: "🎯" }, { value: "independencia", label: "Planejar meu futuro financeiro", emoji: "🏆" }] },
-  { id: "experience", question: "Qual seu nivel de experiencia com financas?", options: [{ value: "nenhuma", label: "Sou iniciante total", emoji: "🌱" }, { value: "basica", label: "Sei o basico", emoji: "📚" }, { value: "intermediaria", label: "Tenho alguma experiencia", emoji: "⚡" }, { value: "avancada", label: "Ja mando bem", emoji: "🔥" }] },
+  { id: "experience", question: "Qual seu nivel de experiencia com financas?", options: [{ value: "none", label: "Sou iniciante total", emoji: "🌱" }, { value: "beginner", label: "Sei o basico", emoji: "📚" }, { value: "intermediate", label: "Tenho alguma experiencia", emoji: "⚡" }, { value: "advanced", label: "Ja mando bem", emoji: "🔥" }] },
 ]
 
 function OnboardingView({ onComplete, onSubmit }: { onComplete: () => void; onSubmit?: (data: OnboardingData) => void }) {
@@ -783,8 +782,9 @@ function TrailsView({ trails, onStartLesson, onProClick }: { trails: Trail[]; on
               const isStarted = progress > 0
               
               // Calcular tempo total estimado
-              const totalMinutes = trail.lessons.reduce((acc, l) => {
-                const min = parseInt(l.duration.replace(/\D/g, '')) || 5
+              const totalMinutes = trail.lessons.reduce((acc: number, l: any) => {
+                const durationStr = l.duration ? String(l.duration) : "5"
+                const min = parseInt(durationStr.replace(/\D/g, '')) || 5
                 return acc + min
               }, 0)
               
@@ -1293,7 +1293,10 @@ function ToolsView({ onProClick }: { onProClick: () => void }) {
               onClick={() => {
                 if (!isUnlocked) {
                   // Mostrar mensagem de nível necessário
-                  alert(`Você precisa estar no nível ${tool.level} para desbloquear esta ferramenta. Complete mais lições para subir de nível!`)
+                  toast.error(`Você precisa estar no nível ${tool.level} para desbloquear esta ferramenta.`, {
+                    description: "Complete mais lições para subir de nível!",
+                    icon: <Lock className="h-4 w-4" />,
+                  })
                 } else if (tool.isPro) {
                   onProClick()
                 } else {
@@ -1376,7 +1379,30 @@ function ToolDetailView({ toolId, toolTitle, onBack }: { toolId: string; toolTit
     { id: "25/25/25/25", label: "O Quadrante", type: "Aplicado", desc: "25% Fixo, 25% Variável, 25% Invest., 25% Edu.", ratios: [0.25, 0.25, 0.25, 0.25] },
   ]
 
-  const { updateUserXp } = useAppStore()
+  const {
+    user,
+    updateUserXp,
+    setMonthlyIncome,
+    setEmergencyFund,
+    addInvestment
+  } = useAppStore()
+
+  const queryClient = useQueryClient()
+
+  const updateProfileMutation = useMutation({
+    mutationFn: (updates: any) => dashboardApi.updateProfile(updates),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] })
+    }
+  })
+
+  const createFinancialMutation = useMutation({
+    mutationFn: (data: any) => financialApi.createRecord(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dashboard"] })
+    }
+  })
+
   const [xpEarned, setXpEarned] = useState(false)
 
   const handleNumericInput = (id: string, rawValue: string) => {
@@ -1419,6 +1445,16 @@ function ToolDetailView({ toolId, toolTitle, onBack }: { toolId: string; toolTit
     if (!xpEarned) {
       updateUserXp(50)
       setXpEarned(true)
+
+      // Sync XP and Level to backend
+      if (user) {
+        const newXp = user.xp + 50
+        const isLevelUp = newXp >= user.xpToNextLevel
+        updateProfileMutation.mutate({
+          xp: isLevelUp ? newXp - user.xpToNextLevel : newXp,
+          level: isLevelUp ? user.level + 1 : user.level
+        })
+      }
     }
 
     switch (toolId) {
@@ -1426,6 +1462,15 @@ function ToolDetailView({ toolId, toolTitle, onBack }: { toolId: string; toolTit
         const income = values.income || 0
         const strategy = budgetStrategies.find(s => s.id === budgetMethod)
         if (strategy) {
+          // Update Store and Backend
+          setMonthlyIncome(income)
+          createFinancialMutation.mutate({
+            type: "INCOME",
+            amount: income,
+            category: "Salário/Renda",
+            date: new Date().toISOString()
+          })
+
           if (budgetMethod === "25/25/25/25") {
             setResult({
               value: income * 0.25,
@@ -1462,6 +1507,23 @@ function ToolDetailView({ toolId, toolTitle, onBack }: { toolId: string; toolTit
         }
         const totalInvested = initial + monthly * months
         const profit = total - totalInvested
+
+        // Update Store and Backend
+        addInvestment({
+          id: `inv-${Date.now()}`,
+          name: `Tesouro Direto - ${years} anos`,
+          type: "tesouro",
+          invested: totalInvested,
+          currentValue: total,
+          lastUpdate: new Date().toISOString()
+        })
+        createFinancialMutation.mutate({
+          type: "INVESTMENT",
+          amount: totalInvested,
+          category: "Tesouro Direto",
+          date: new Date().toISOString()
+        })
+
         setResult({
           value: total,
           details: [
@@ -1478,6 +1540,23 @@ function ToolDetailView({ toolId, toolTitle, onBack }: { toolId: string; toolTit
         const rate = 0.12 // 12% ao ano
         const total = initial * Math.pow(1 + rate, years)
         const profit = total - initial
+
+        // Update Store and Backend
+        addInvestment({
+          id: `inv-${Date.now()}`,
+          name: `Simulação de Ações - ${years} anos`,
+          type: "acao",
+          invested: initial,
+          currentValue: total,
+          lastUpdate: new Date().toISOString()
+        })
+        createFinancialMutation.mutate({
+          type: "INVESTMENT",
+          amount: initial,
+          category: "Ações/Bolsa",
+          date: new Date().toISOString()
+        })
+
         setResult({
           value: total,
           details: [
@@ -1499,6 +1578,15 @@ function ToolDetailView({ toolId, toolTitle, onBack }: { toolId: string; toolTit
           total = total * (1 + rate / 12) + monthly
         }
         const totalInvested = initial + monthly * months
+
+        // Update Backend
+        createFinancialMutation.mutate({
+          type: "INVESTMENT",
+          amount: initial,
+          category: "Juros Compostos",
+          date: new Date().toISOString()
+        })
+
         setResult({
           value: total,
           details: [
@@ -1513,6 +1601,16 @@ function ToolDetailView({ toolId, toolTitle, onBack }: { toolId: string; toolTit
         const expenses = values.expenses || 0
         const months = values.months || 6
         const total = expenses * months
+
+        // Update Store and Backend
+        setEmergencyFund(total, total * 0.1) // Start with 10% for demo
+        createFinancialMutation.mutate({
+          type: "EXPENSE",
+          amount: expenses,
+          category: "Custo de Vida",
+          date: new Date().toISOString()
+        })
+
         setResult({
           value: total,
           details: [
@@ -1520,6 +1618,69 @@ function ToolDetailView({ toolId, toolTitle, onBack }: { toolId: string; toolTit
             `Meses de cobertura: ${months}`,
             `Meta de reserva: R$ ${total.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
           ],
+        })
+        break
+      }
+      case "crypto": {
+        const initial = values.initial || 0
+        const vol = (values.volatility || 8) / 10
+        // Simulate a high variance result
+        const multiplier = 1 + (Math.random() * vol * 2) - (vol * 0.5)
+        const total = initial * multiplier
+
+        // Update Store and Backend
+        addInvestment({
+          id: `inv-${Date.now()}`,
+          name: "Ativos Digitais (Cripto)",
+          type: "cripto",
+          invested: initial,
+          currentValue: total,
+          lastUpdate: new Date().toISOString()
+        })
+        createFinancialMutation.mutate({
+          type: "INVESTMENT",
+          amount: initial,
+          category: "Criptoativos",
+          date: new Date().toISOString()
+        })
+
+        setResult({
+          value: total,
+          details: [
+            `Investimento inicial: R$ ${initial.toLocaleString("pt-BR")}`,
+            `Volatilidade simulada: ${(vol * 100).toFixed(0)}%`,
+            multiplier > 1 ? "Cenário de Alta 🚀" : "Cenário de Queda 📉"
+          ]
+        })
+        break
+      }
+      case "retirement": {
+        const age = values.age || 25
+        const retireAge = values.retireAge || 65
+        const monthly = values.monthly || 1000
+        const years = retireAge - age
+        const rate = 0.08 // 8% ao ano conservador
+        const months = years * 12
+        let total = 0
+        for (let i = 0; i < months; i++) {
+          total = total * (1 + rate / 12) + monthly
+        }
+
+        // Update Backend
+        createFinancialMutation.mutate({
+          type: "INVESTMENT",
+          amount: monthly,
+          category: "Aposentadoria",
+          date: new Date().toISOString()
+        })
+
+        setResult({
+          value: total,
+          details: [
+            `Tempo de acumulação: ${years} anos`,
+            `Aporte mensal: R$ ${monthly.toLocaleString("pt-BR")}`,
+            `Rendimento estimado: 8% a.a. (IPCA+)`
+          ]
         })
         break
       }
@@ -1549,6 +1710,17 @@ function ToolDetailView({ toolId, toolTitle, onBack }: { toolId: string; toolTit
         return [
           { id: "expenses", label: "Despesas mensais", placeholder: "3000", type: "currency" },
           { id: "months", label: "Meses de reserva", placeholder: "6", type: "time" },
+        ]
+      case "crypto":
+        return [
+          { id: "initial", label: "Valor inicial", placeholder: "1000", type: "currency" },
+          { id: "volatility", label: "Nivel de Risco (1-10)", placeholder: "8", type: "percent" },
+        ]
+      case "retirement":
+        return [
+          { id: "age", label: "Sua Idade", placeholder: "25", type: "time" },
+          { id: "retireAge", label: "Idade de Aposentadoria", placeholder: "65", type: "time" },
+          { id: "monthly", label: "Investimento Mensal", placeholder: "1000", type: "currency" },
         ]
       default:
         return []
@@ -1709,7 +1881,7 @@ function LessonExplanationView({ lesson, onStartPractice, onBack }: { lesson: Le
           <h1 className="text-2xl font-black text-white">{lesson.title}</h1>
           <div className="mt-2 flex items-center gap-2 rounded-full bg-slate-900/50 px-3 py-1 border border-slate-800 backdrop-blur-sm">
             <Clock className="h-3 w-3 text-emerald-400" />
-            <span className="text-[10px] font-bold text-slate-300 uppercase tracking-wider">{lesson.duration} de preparacao</span>
+            <span className="text-[10px] font-bold text-slate-300 uppercase tracking-wider">{lesson.duration || "5 min"} de preparacao</span>
           </div>
         </div>
         <button onClick={onBack} className="absolute left-6 top-8 flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 border border-slate-800 text-slate-300 transition-all hover:scale-110 active:scale-95">
@@ -2066,41 +2238,42 @@ function LoginView({ onSuccess }: { onSuccess: () => void }) {
     setError("")
     setIsLoading(true)
 
-    // Simulate API delay
-    await new Promise((r) => setTimeout(r, 800))
-
-    if (mode === "login") {
-      if (!authEmail) {
-        setError("Nenhuma conta encontrada. Crie uma conta primeiro.")
-        setIsLoading(false)
-        return
-      }
-      const success = login(email, password)
-      if (success) {
-        onSuccess()
+    try {
+      if (mode === "login") {
+        const response = await api.post("/auth/login", { email, password })
+        if (response && response.token) {
+          localStorage.setItem("finance-token", response.token)
+          useAppStore.setState({ isLoggedIn: true, authEmail: email, user: response.user })
+          onSuccess()
+        }
       } else {
-        setError("Email ou senha incorretos")
+        if (name.length < 2) {
+          setError("Nome deve ter pelo menos 2 caracteres")
+          setIsLoading(false)
+          return
+        }
+        if (email.length < 5 || !email.includes("@")) {
+          setError("Email invalido")
+          setIsLoading(false)
+          return
+        }
+        if (password.length < 8) {
+          setError("Senha deve ter pelo menos 8 caracteres")
+          setIsLoading(false)
+          return
+        }
+        const response = await api.post("/auth/register", { email, password, name })
+        if (response && response.token) {
+          localStorage.setItem("finance-token", response.token)
+          useAppStore.setState({ isLoggedIn: true, authEmail: email, user: response.user })
+          onSuccess()
+        }
       }
-    } else {
-      if (name.length < 2) {
-        setError("Nome deve ter pelo menos 2 caracteres")
-        setIsLoading(false)
-        return
-      }
-      if (email.length < 5 || !email.includes("@")) {
-        setError("Email invalido")
-        setIsLoading(false)
-        return
-      }
-      if (password.length < 6) {
-        setError("Senha deve ter pelo menos 6 caracteres")
-        setIsLoading(false)
-        return
-      }
-      register(email, password, name)
-      onSuccess()
+    } catch (err: any) {
+      setError(err?.message || "Ocorreu um erro ao conectar ao servidor")
+    } finally {
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }
 
   return (
@@ -2484,6 +2657,13 @@ function FinanceApp() {
     setIsHydrated(true)
   }, [])
 
+  // Sincroniza dados do usuário da API com o store global
+  useEffect(() => {
+    if (data?.user) {
+      useAppStore.setState({ user: data.user })
+    }
+  }, [data?.user])
+
   // Set initial view based on persisted state
   useEffect(() => {
     if (isHydrated) {
@@ -2515,12 +2695,23 @@ function FinanceApp() {
 
   const handlePractice = () => setCurrentView("quiz")
 
+  const completeLessonMutation = useMutation({
+    mutationFn: async (lessonId: string) => {
+      return lessonsApi.completeLesson({ lessonId })
+    },
+    onSuccess: () => {
+      refetch()
+      setShowCompletionModal(true)
+    },
+  })
+
   const handleQuizComplete = () => {
     if (selectedLesson) {
-      // Save lesson completion to Zustand
+      // Save locally to store first for immediate UI feedback (optional but good)
       completeLesson(selectedLesson.id, selectedLesson.xpReward)
+      // Save to backend
+      completeLessonMutation.mutate(selectedLesson.id)
     }
-    setShowCompletionModal(true)
   }
 
   const handleCompletionClose = () => {
@@ -2569,14 +2760,14 @@ function FinanceApp() {
   // Merge persisted user data with fetched data
   const mergedData = {
     ...data,
-    user: user || data.user,
-    trails: data.trails.map(trail => ({
+    user: data.user || user,
+    trails: (data.trails || []).map((trail: any) => ({
       ...trail,
-      lessons: trail.lessons.map(lesson => ({
+      lessons: (trail.lessons || []).map((lesson: any) => ({
         ...lesson,
-        isCompleted: isLessonCompleted(lesson.id) || lesson.isCompleted,
+        isCompleted: isLessonCompleted(lesson.id) || lesson.isCompleted || lesson.completed,
       })),
-      completedLessons: trail.lessons.filter(l => isLessonCompleted(l.id) || l.isCompleted).length,
+      completedLessons: (trail.lessons || []).filter((l: any) => isLessonCompleted(l.id) || l.isCompleted || l.completed).length,
     })),
   }
 
