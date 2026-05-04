@@ -13,7 +13,7 @@ export const dashboardApi = {
    * Submit onboarding data
    */
   submitOnboarding: (data: OnboardingData): Promise<{ success: boolean }> => {
-    return api.post("/onboarding", data);
+    return api.post("/user/onboarding", data);
   },
 
   /**

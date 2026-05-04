@@ -28,20 +28,23 @@ export interface AuthCredentials {
 export interface OnboardingData {
   age: "16-18" | "19-21" | "22-24" | "25+"
   goal: "poupar" | "investir" | "sair_dividas" | "independencia"
-  experience: "nenhuma" | "basica" | "intermediaria" | "avancada"
+  experience: "none" | "beginner" | "intermediate" | "advanced"
 }
 
 export interface Lesson {
   id: string
   title: string
   description: string
-  duration: string
+  content: string
+  activityContent?: string
+  duration?: string
   xpReward: number
   isCompleted: boolean
   isLocked: boolean
   isPro: boolean
-  icon: string
-  category: string
+  icon?: string
+  category?: string
+  tips?: string[]
 }
 
 export interface Trail {

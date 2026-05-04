@@ -18,14 +18,14 @@ export const lessonsApi = {
    * Get all available trails
    */
   getTrails: (): Promise<Trail[]> => {
-    return api.get("/lessons/trails");
+    return api.get("/trails");
   },
 
   /**
    * Get specific trail with lessons
    */
   getTrail: (trailId: string): Promise<Trail> => {
-    return api.get(`/lessons/trails/${trailId}`);
+    return api.get(`/trails/${trailId}`);
   },
 
   /**
@@ -39,7 +39,7 @@ export const lessonsApi = {
    * Mark lesson as completed
    */
   completeLesson: (data: CompleteLessonRequest): Promise<CompleteLessonResponse> => {
-    return api.post("/lessons/complete", data);
+    return api.post(`/lessons/${data.lessonId}/complete`, data);
   },
 
   /**
