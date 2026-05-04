@@ -8,10 +8,10 @@
 export { fetchApi, api, ApiError, API_CONFIG } from "../api";
 
 // API Modules
-export { authApi } from "./api/auth";
-export { dashboardApi } from "./api/dashboard";
-export { lessonsApi } from "./api/lessons";
-export { financialApi } from "./api/financial";
+export { authApi } from "./auth";
+export { dashboardApi } from "./dashboard";
+export { lessonsApi } from "./lessons";
+export { financialApi } from "./financial";
 
 // Types
 export type {

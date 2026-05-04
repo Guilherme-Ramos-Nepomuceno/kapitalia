@@ -77,7 +77,12 @@ const handleResponse = async (response: Response): Promise<any> => {
   // Handle empty responses
   const contentType = response.headers.get("content-type");
   if (contentType && contentType.includes("application/json")) {
-    return response.json();
+    const json = await response.json();
+    // Desempacota o envelope padrão da API { status: "success", data: ... }
+    if (json && json.status === "success" && json.data !== undefined) {
+      return json.data;
+    }
+    return json;
   }
 
   return response.text();

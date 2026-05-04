@@ -59,6 +59,6 @@ export const authApi = {
    * Get current user profile
    */
   getProfile: (): Promise<AuthResponse["user"]> => {
-    return api.get("/auth/profile");
+    return api.get("/user/profile");
   },
 };
