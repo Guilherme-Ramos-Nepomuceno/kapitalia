@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Outfit, Space_Grotesk } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 
 const outfit = Outfit({
@@ -47,6 +48,7 @@ export default function RootLayout({
     <html lang="pt-BR" suppressHydrationWarning>
       <body className={`${outfit.variable} ${spaceGrotesk.variable} font-sans antialiased`}>
         {children}
+        <Toaster position="top-center" expand={false} richColors />
         <Analytics />
       </body>
     </html>
