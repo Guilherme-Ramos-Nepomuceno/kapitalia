@@ -2404,7 +2404,7 @@ function LoginView({ onSuccess }: { onSuccess: () => void }) {
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Mínimo 6 caracteres"
+                    placeholder="Mínimo 8 caracteres"
                     className="w-full h-14 rounded-2xl border border-slate-800 bg-slate-900 pl-12 pr-4 text-white placeholder-slate-600 outline-none transition-all focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10"
                   />
                   <button
