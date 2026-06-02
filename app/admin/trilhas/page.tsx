@@ -8,7 +8,6 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 interface Lesson {
-  id: string
   title: string
   description: string
   content: string
@@ -19,7 +18,6 @@ export default function AdminTrilhas() {
   const router = useRouter()
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
   const [formData, setFormData] = useState({
-    id: "",
     title: "",
     description: "",
     color: "from-blue-500 to-cyan-600",
@@ -28,7 +26,6 @@ export default function AdminTrilhas() {
   })
   const [lessons, setLessons] = useState<Lesson[]>([])
   const [newLesson, setNewLesson] = useState<Partial<Lesson>>({
-    id: "",
     title: "",
     description: "",
     content: "",
@@ -81,13 +78,12 @@ export default function AdminTrilhas() {
   }
 
   const handleAddLesson = () => {
-    if (!newLesson.id || !newLesson.title || !newLesson.description || !newLesson.content) {
+    if (!newLesson.title || !newLesson.description || !newLesson.content) {
       toast.error("Preencha todos os campos da lição")
       return
     }
 
     const lessonWithOrder: Lesson = {
-      id: newLesson.id || "",
       title: newLesson.title || "",
       description: newLesson.description || "",
       content: newLesson.content || "",
@@ -108,7 +104,7 @@ export default function AdminTrilhas() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (!formData.id || !formData.title || !formData.description) {
+    if (!formData.title || !formData.description) {
       toast.error("Preencha os campos obrigatórios da trilha")
       return
     }
@@ -128,7 +124,6 @@ export default function AdminTrilhas() {
       toast.success("Trilha criada com sucesso!")
       // Reset form
       setFormData({
-        id: "",
         title: "",
         description: "",
         color: "from-blue-500 to-cyan-600",
@@ -191,32 +186,17 @@ export default function AdminTrilhas() {
             <div className="space-y-4">
               <h2 className="text-xl font-semibold">Informações Básicas</h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">ID da Trilha *</label>
-                  <input
-                    type="text"
-                    name="id"
-                    value={formData.id}
-                    onChange={handleInputChange}
-                    placeholder="ex: trilha_01"
-                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-blue-500"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">Título *</label>
-                  <input
-                    type="text"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleInputChange}
-                    placeholder="ex: Fundamentos Financeiros"
-                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-blue-500"
-                    required
-                  />
-                </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Título *</label>
+                <input
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  placeholder="ex: Fundamentos Financeiros"
+                  className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                  required
+                />
               </div>
 
               <div>
@@ -297,27 +277,15 @@ export default function AdminTrilhas() {
 
               {showLessonForm && (
                 <div className="bg-slate-700/50 border border-slate-600 rounded-lg p-4 space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">ID da Lição</label>
-                      <input
-                        type="text"
-                        value={newLesson.id || ""}
-                        onChange={(e) => setNewLesson({ ...newLesson, id: e.target.value })}
-                        placeholder="ex: lecao_01"
-                        className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-blue-500"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Título</label>
-                      <input
-                        type="text"
-                        value={newLesson.title || ""}
-                        onChange={(e) => setNewLesson({ ...newLesson, title: e.target.value })}
-                        placeholder="ex: Introdução"
-                        className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-blue-500"
-                      />
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Título</label>
+                    <input
+                      type="text"
+                      value={newLesson.title || ""}
+                      onChange={(e) => setNewLesson({ ...newLesson, title: e.target.value })}
+                      placeholder="ex: Introdução"
+                      className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                    />
                   </div>
 
                   <div>
