@@ -100,7 +100,7 @@ interface AppState {
   
   // User Data
   user: User | null
-  token: String 
+  token: string | null
   isOnboarded: boolean
   onboardingData: OnboardingData | null
 
@@ -132,6 +132,7 @@ interface AppState {
   
   // Actions - User
   setUser: (user: User) => void
+  setToken: (token: string | null) => void
   updateUserXp: (xp: number) => void
   upgradeToProDemo: () => void
   
@@ -168,6 +169,7 @@ const initialState = {
   authEmail: null as string | null,
   authPassword: null as string | null,
   user: null,
+  token: null as string | null,
   isOnboarded: false,
   onboardingData: null,
   completedLessons: new Set<string>(),
@@ -351,6 +353,7 @@ export const useAppStore = create<AppState>()(
 
       // User Actions
       setUser: (user) => set({ user }),
+      setToken: (token) => set({ token }),
 
       updateUserXp: (xp) =>
         set((state) => {
@@ -523,6 +526,7 @@ export const useAppStore = create<AppState>()(
         authEmail: state.authEmail,
         authPassword: state.authPassword,
         user: state.user,
+        token: state.token,
         isOnboarded: state.isOnboarded,
         onboardingData: state.onboardingData,
         completedLessons: state.completedLessons,
