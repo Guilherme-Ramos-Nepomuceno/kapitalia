@@ -100,6 +100,7 @@ interface AppState {
   
   // User Data
   user: User | null
+  token: String 
   isOnboarded: boolean
   onboardingData: OnboardingData | null
 

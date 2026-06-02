@@ -2242,7 +2242,7 @@ function LoginView({ onSuccess }: { onSuccess: () => void }) {
       if (mode === "login") {
         const response = await api.post("/auth/login", { email, password })
         if (response && response.token) {
-          localStorage.setItem("finance-token", response.token)
+          localStorage.setItem("token", response.token)
           useAppStore.setState({ isLoggedIn: true, authEmail: email, user: response.user })
           onSuccess()
         }
@@ -2264,7 +2264,7 @@ function LoginView({ onSuccess }: { onSuccess: () => void }) {
         }
         const response = await api.post("/auth/register", { email, password, name })
         if (response && response.token) {
-          localStorage.setItem("finance-token", response.token)
+          localStorage.setItem("token", response.token)
           useAppStore.setState({ isLoggedIn: true, authEmail: email, user: response.user })
           onSuccess()
         }
