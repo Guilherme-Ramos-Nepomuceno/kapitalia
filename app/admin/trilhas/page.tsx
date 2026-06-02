@@ -1,11 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { toast } from "sonner"
-import { api } from "@/lib/api"
-import { useAppStore } from "@/lib/store"
-import { ArrowLeft, Plus, X, Upload } from "lucide-react"
+import { api, ApiError } from "@/lib/api"
+import { ArrowLeft, Plus, X } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 interface Lesson {
   id: string
@@ -16,7 +16,8 @@ interface Lesson {
 }
 
 export default function AdminTrilhas() {
-  const { token, user } = useAppStore()
+  const router = useRouter()
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
   const [formData, setFormData] = useState({
     id: "",
     title: "",
@@ -35,9 +36,31 @@ export default function AdminTrilhas() {
   const [loading, setLoading] = useState(false)
   const [showLessonForm, setShowLessonForm] = useState(false)
 
-  if (!token || !user) {
+  useEffect(() => {
+    // Verificar se token existe no localStorage
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null
+    setIsAuthenticated(!!token)
+
+    if (!token) {
+      toast.error("Você precisa estar autenticado")
+      router.push("/")
+    }
+  }, [router])
+
+  if (isAuthenticated === null) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950 text-white flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-b from-slate-900 to-slate-950 text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p>Carregando...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-linear-to-b from-slate-900 to-slate-950 text-white flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-3xl font-bold mb-4">Acesso Restrito</h1>
           <p className="mb-6">Você precisa estar autenticado para acessar esta página.</p>
@@ -100,22 +123,7 @@ export default function AdminTrilhas() {
         })),
       }
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || "https://9em0grlix2.execute-api.us-east-2.amazonaws.com/prod"}/trails`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      )
-
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.message || "Erro ao criar trilha")
-      }
+      await api.post("/trails", payload)
 
       toast.success("Trilha criada com sucesso!")
       // Reset form
@@ -130,7 +138,11 @@ export default function AdminTrilhas() {
       setLessons([])
     } catch (error) {
       console.error("Erro ao criar trilha:", error)
-      toast.error(error instanceof Error ? error.message : "Erro ao criar trilha")
+      if (error instanceof ApiError) {
+        toast.error(error.message)
+      } else {
+        toast.error("Erro ao criar trilha")
+      }
     } finally {
       setLoading(false)
     }
@@ -163,7 +175,7 @@ export default function AdminTrilhas() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950 text-white p-6">
+    <div className="min-h-screen bg-linear-to-b from-slate-900 to-slate-950 text-white p-6">
       <div className="max-w-4xl mx-auto">
         <Link href="/" className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 mb-6">
           <ArrowLeft className="w-4 h-4" />
