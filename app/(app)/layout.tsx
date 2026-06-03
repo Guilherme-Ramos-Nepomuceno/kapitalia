@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAppStore } from "@/lib/store"
+import { BottomNav } from "@/components/app/BottomNav"
 import { DashboardSkeleton } from "@/components/app/DashboardSkeleton"
 
-export default function Root() {
-  const router = useRouter()
+export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [isHydrated, setIsHydrated] = useState(false)
   const { isLoggedIn, isOnboarded } = useAppStore()
+  const router = useRouter()
 
   useEffect(() => {
     setIsHydrated(true)
@@ -16,10 +17,20 @@ export default function Root() {
 
   useEffect(() => {
     if (!isHydrated) return
-    if (isLoggedIn && isOnboarded) router.replace("/home")
-    else if (isLoggedIn) router.replace("/onboarding")
-    else router.replace("/login")
+    if (!isLoggedIn) {
+      router.replace("/login")
+    } else if (!isOnboarded) {
+      router.replace("/onboarding")
+    }
   }, [isHydrated, isLoggedIn, isOnboarded, router])
 
-  return <DashboardSkeleton />
+  if (!isHydrated) return <DashboardSkeleton />
+  if (!isLoggedIn || !isOnboarded) return <DashboardSkeleton />
+
+  return (
+    <>
+      {children}
+      <BottomNav />
+    </>
+  )
 }

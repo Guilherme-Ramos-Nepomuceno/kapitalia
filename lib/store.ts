@@ -101,6 +101,7 @@ interface AppState {
   // User Data
   user: User | null
   token: string | null
+  currentLesson: any | null
   isOnboarded: boolean
   onboardingData: OnboardingData | null
 
@@ -170,6 +171,7 @@ const initialState = {
   authPassword: null as string | null,
   user: null,
   token: null as string | null,
+  currentLesson: null as any | null,
   isOnboarded: false,
   onboardingData: null,
   completedLessons: new Set<string>(),
