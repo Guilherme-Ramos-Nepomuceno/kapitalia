@@ -4,9 +4,9 @@
 
 export const API_CONFIG = {
   BASE_URL: process.env.NEXT_PUBLIC_API_URL || "/api",
-  TIMEOUT: 10000, // 10 seconds
-  RETRY_ATTEMPTS: 3,
-  RETRY_DELAY: 1000, // 1 second
+  TIMEOUT: 15000, // 15 seconds (Lambda cold start)
+  RETRY_ATTEMPTS: 1,
+  RETRY_DELAY: 500,
 } as const;
 
 /**
@@ -113,7 +113,7 @@ export async function fetchApi(
     if (
       retryCount < API_CONFIG.RETRY_ATTEMPTS &&
       (error instanceof TypeError || // Network errors
-       (error instanceof ApiError && error.status >= 500)) // Server errors
+       (error instanceof ApiError && error.status >= 500 && error.status !== 401 && error.status !== 403)) // Server errors only
     ) {
       await sleep(API_CONFIG.RETRY_DELAY * Math.pow(2, retryCount)); // Exponential backoff
       return fetchApi(endpoint, options, retryCount + 1);
