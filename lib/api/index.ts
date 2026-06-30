@@ -16,7 +16,6 @@ export { financialApi } from "./financial";
 // Types
 export type {
   User,
-  OnboardingData,
   Lesson,
   Trail,
   DashboardData,

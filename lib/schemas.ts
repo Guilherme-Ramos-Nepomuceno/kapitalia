@@ -14,12 +14,6 @@ export const UserSchema = z.object({
   joinedAt: z.string().optional(),
 })
 
-export const OnboardingSchema = z.object({
-  age: z.enum(["16-18", "19-21", "22-24", "25+"]),
-  goal: z.enum(["poupar", "investir", "sair_dividas", "independencia"]),
-  experience: z.enum(["none", "beginner", "intermediate", "advanced"]),
-})
-
 export const LessonSchema = z.object({
   id: z.string(),
   title: z.string(),
@@ -67,7 +61,6 @@ export const DashboardDataSchema = z.object({
 })
 
 export type AppUser = z.infer<typeof UserSchema>
-export type OnboardingData = z.infer<typeof OnboardingSchema>
 export type Lesson = z.infer<typeof LessonSchema>
 export type Trail = z.infer<typeof TrailSchema>
 export type QuizQuestion = z.infer<typeof QuizQuestionSchema>

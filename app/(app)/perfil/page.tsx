@@ -2,13 +2,13 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Zap, Trophy, Flame, CheckCircle2, Coins, Crown, Target, Calendar, ChevronRight, LogOut } from "lucide-react"
+import { Zap, Trophy, Flame, CheckCircle2, Coins, Crown, Calendar, ChevronRight, LogOut } from "lucide-react"
 import { useAppStore } from "@/lib/store"
 import { ProModal } from "@/components/app/ProModal"
 
 export default function PerfilPage() {
   const router = useRouter()
-  const { user, totalXpEarned, completedLessons, onboardingData, logout } = useAppStore()
+  const { user, totalXpEarned, completedLessons, logout } = useAppStore()
   const [showProModal, setShowProModal] = useState(false)
 
   if (!user) {
@@ -78,30 +78,6 @@ export default function PerfilPage() {
           <div className="h-full bg-linear-to-r from-emerald-500 to-teal-500 transition-all" style={{ width: `${(user.xp / user.xpToNextLevel) * 100}%` }} />
         </div>
       </div>
-
-      {/* Onboarding Info */}
-      {onboardingData && (
-        <div className="mb-6 rounded-3xl border border-slate-800 bg-slate-900 p-5">
-          <h3 className="mb-4 flex items-center gap-2 font-semibold text-white">
-            <Target className="h-5 w-5 text-emerald-400" />
-            Seu Perfil
-          </h3>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-400">Faixa etaria</span>
-              <span className="text-sm font-medium text-white">{onboardingData.age} anos</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-400">Objetivo</span>
-              <span className="text-sm font-medium text-white capitalize">{onboardingData.goal.replace("_", " ")}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-400">Experiencia</span>
-              <span className="text-sm font-medium text-white capitalize">{onboardingData.experience}</span>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Join Date */}
       {user.joinedAt && (

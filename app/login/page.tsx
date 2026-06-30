@@ -9,7 +9,7 @@ import { api } from "@/lib/api"
 
 export default function LoginPage() {
   const router = useRouter()
-  const { isLoggedIn, isOnboarded } = useAppStore()
+  const { isLoggedIn } = useAppStore()
   const [mode, setMode] = useState<"login" | "register">("login")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -19,9 +19,8 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    if (isLoggedIn && isOnboarded) router.replace("/home")
-    else if (isLoggedIn) router.replace("/onboarding")
-  }, [isLoggedIn, isOnboarded, router])
+    if (isLoggedIn) router.replace("/home")
+  }, [isLoggedIn, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -34,7 +33,7 @@ export default function LoginPage() {
         if (response && response.token) {
           localStorage.setItem("token", response.token)
           useAppStore.setState({ isLoggedIn: true, authEmail: email, user: response.user })
-          router.push(response.user?.isOnboarded ? "/home" : "/onboarding")
+          router.push("/home")
         }
       } else {
         if (name.length < 2) { setError("Nome deve ter pelo menos 2 caracteres"); setIsLoading(false); return }
@@ -44,7 +43,7 @@ export default function LoginPage() {
         if (response && response.token) {
           localStorage.setItem("token", response.token)
           useAppStore.setState({ isLoggedIn: true, authEmail: email, user: response.user })
-          router.push("/onboarding")
+          router.push("/home")
         }
       }
     } catch (err: any) {

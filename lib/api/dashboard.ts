@@ -1,5 +1,5 @@
 import { api } from "../api";
-import type { DashboardData, OnboardingData } from "../types/api";
+import type { DashboardData } from "../types/api";
 
 export const dashboardApi = {
   /**
@@ -7,13 +7,6 @@ export const dashboardApi = {
    */
   getDashboard: (): Promise<DashboardData> => {
     return api.get("/dashboard");
-  },
-
-  /**
-   * Submit onboarding data
-   */
-  submitOnboarding: (data: OnboardingData): Promise<{ success: boolean }> => {
-    return api.post("/user/onboarding", data);
   },
 
   /**

@@ -8,7 +8,7 @@ import { DashboardSkeleton } from "@/components/app/DashboardSkeleton"
 export default function Root() {
   const router = useRouter()
   const [isHydrated, setIsHydrated] = useState(false)
-  const { isLoggedIn, isOnboarded } = useAppStore()
+  const { isLoggedIn } = useAppStore()
 
   useEffect(() => {
     setIsHydrated(true)
@@ -16,10 +16,9 @@ export default function Root() {
 
   useEffect(() => {
     if (!isHydrated) return
-    if (isLoggedIn && isOnboarded) router.replace("/home")
-    else if (isLoggedIn) router.replace("/onboarding")
+    if (isLoggedIn) router.replace("/home")
     else router.replace("/login")
-  }, [isHydrated, isLoggedIn, isOnboarded, router])
+  }, [isHydrated, isLoggedIn, router])
 
   return <DashboardSkeleton />
 }

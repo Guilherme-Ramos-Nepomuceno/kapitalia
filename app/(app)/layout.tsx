@@ -8,7 +8,7 @@ import { DashboardSkeleton } from "@/components/app/DashboardSkeleton"
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [isHydrated, setIsHydrated] = useState(false)
-  const { isLoggedIn, isOnboarded } = useAppStore()
+  const { isLoggedIn } = useAppStore()
   const router = useRouter()
 
   useEffect(() => {
@@ -19,13 +19,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     if (!isHydrated) return
     if (!isLoggedIn) {
       router.replace("/login")
-    } else if (!isOnboarded) {
-      router.replace("/onboarding")
     }
-  }, [isHydrated, isLoggedIn, isOnboarded, router])
+  }, [isHydrated, isLoggedIn, router])
 
   if (!isHydrated) return <DashboardSkeleton />
-  if (!isLoggedIn || !isOnboarded) return <DashboardSkeleton />
+  if (!isLoggedIn) return <DashboardSkeleton />
 
   return (
     <>
