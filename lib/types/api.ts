@@ -17,13 +17,6 @@ export interface User {
   joinedAt?: string
 }
 
-export interface OnboardingData {
-  name: string
-  age: "16-18" | "19-21" | "22-24" | "25+"
-  goal: "poupar" | "investir" | "sair_dividas" | "independencia"
-  experience: "nenhuma" | "basica" | "intermediaria" | "avancada"
-}
-
 export interface Lesson {
   id: string
   title: string

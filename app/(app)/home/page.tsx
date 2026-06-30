@@ -127,7 +127,11 @@ export default function HomePage() {
         <h2 className="mb-3 text-lg font-bold text-white">Suas trilhas</h2>
         <div className="space-y-3">
           {trails.slice(0, 3).map((trail: any) => (
-            <div key={trail.id} className={`rounded-2xl border p-4 transition-all ${trail.isPro ? "border-amber-500/30 bg-amber-500/5" : "border-slate-800 bg-slate-900"}`}>
+            <button
+              key={trail.id}
+              onClick={() => (trail.isPro ? setShowProModal(true) : router.push(`/trilhas/${trail.id}`))}
+              className={`w-full rounded-2xl border p-4 text-left transition-all hover:scale-[1.02] ${trail.isPro ? "border-amber-500/30 bg-amber-500/5 hover:border-amber-500/50" : "border-slate-800 bg-slate-900 hover:border-emerald-500/50 hover:bg-slate-800"}`}
+            >
               <div className="flex items-center gap-4">
                 <div className={`flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br ${trail.color}`}>
                   {trail.isPro ? <Crown className="h-6 w-6 text-white" /> : <Map className="h-6 w-6 text-white" />}
@@ -146,7 +150,7 @@ export default function HomePage() {
               <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-800">
                 <div className={`h-full bg-linear-to-r ${trail.color} transition-all`} style={{ width: `${trail.totalLessons > 0 ? (trail.completedLessons / trail.totalLessons) * 100 : 0}%` }} />
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>

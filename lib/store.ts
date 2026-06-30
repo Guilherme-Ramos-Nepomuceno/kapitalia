@@ -25,12 +25,6 @@ export interface AuthCredentials {
   name?: string
 }
 
-export interface OnboardingData {
-  age: "16-18" | "19-21" | "22-24" | "25+"
-  goal: "poupar" | "investir" | "sair_dividas" | "independencia"
-  experience: "none" | "beginner" | "intermediate" | "advanced"
-}
-
 export interface Lesson {
   id: string
   title: string
@@ -102,8 +96,6 @@ interface AppState {
   user: User | null
   token: string | null
   currentLesson: any | null
-  isOnboarded: boolean
-  onboardingData: OnboardingData | null
 
   // Progress Data
   completedLessons: Set<string>
@@ -136,10 +128,7 @@ interface AppState {
   setToken: (token: string | null) => void
   updateUserXp: (xp: number) => void
   upgradeToProDemo: () => void
-  
-  // Actions - Onboarding
-  completeOnboarding: (data: OnboardingData) => void
-  
+
   // Actions - Lessons
   completeLesson: (lessonId: string, xpReward: number) => void
   isLessonCompleted: (lessonId: string) => boolean
@@ -172,8 +161,6 @@ const initialState = {
   user: null,
   token: null as string | null,
   currentLesson: null as any | null,
-  isOnboarded: false,
-  onboardingData: null,
   completedLessons: new Set<string>(),
   monthlyIncome: 0,
   expenses: [] as ExpenseCategory[],
@@ -323,7 +310,6 @@ export const useAppStore = create<AppState>()(
           isLoggedIn: true,
           authEmail: email,
           authPassword: password,
-          isOnboarded: false,
           user: {
             id: `user-${Date.now()}`,
             name,
@@ -387,25 +373,6 @@ export const useAppStore = create<AppState>()(
           if (!state.user) return state
           return { user: { ...state.user, isPro: true } }
         }),
-
-      // Onboarding Actions
-      completeOnboarding: (data) =>
-        set((state) => ({
-          isOnboarded: true,
-          onboardingData: data,
-          user: state.user 
-            ? { ...state.user } // Keep existing user (from registration)
-            : {
-                id: `user-${Date.now()}`,
-                name: "Estudante",
-                level: 1,
-                xp: 0,
-                xpToNextLevel: 100,
-                streak: 0,
-                isPro: false,
-                totalCoins: 0,
-              },
-        })),
 
       // Lesson Actions
       completeLesson: (lessonId, xpReward) =>
@@ -529,8 +496,6 @@ export const useAppStore = create<AppState>()(
         authPassword: state.authPassword,
         user: state.user,
         token: state.token,
-        isOnboarded: state.isOnboarded,
-        onboardingData: state.onboardingData,
         completedLessons: state.completedLessons,
         monthlyIncome: state.monthlyIncome,
         expenses: state.expenses,
